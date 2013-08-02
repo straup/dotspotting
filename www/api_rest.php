@@ -1,15 +1,16 @@
 <?php
 
-	#
-	# $Id$
-	#
+	# Note the order here – it's important
+	# (20121024/straup)
 
 	$GLOBALS['this_is_api'] = 1;
+
 	include("include/init.php");
-
 	loadlib("api");
-	loadlib("api_output_rest");
 
-	api_dispatch();
+	$method = request_str("method");
+
+	api_dispatch($method);
 	exit();
+
 ?>
