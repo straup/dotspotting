@@ -42,8 +42,6 @@ Configuring Dotspotting
 
 Copy the Dotspotting `config/dotspotting.php.example` file ([this one](https://github.com/Citytracking/dotspotting/blob/master/config/dotspotting.php.example)) to `config/dotspotting.php` and adjust various site configs for your Dotspotting installation. The example file is heavily commented and all the various configs are grouped by things you MUST, SHOULD and MAY need to change.
 
-The important thing to note here is the `config/dotspotting.php` overrides any values defined in the application's [default config file](https://github.com/Citytracking/dotspotting/blob/master/www/include/config.php).
-
 For a complete list of Dotspotting-specific config options, you should consult the [README.CONFIG.md](http://github.com/citytracking/dotspotting/blob/master/README.CONFIG.md) document.
 
 Flamework
