@@ -6,7 +6,7 @@ WHEREAMI=`dirname $WHOAMI`
 PROJECT=`dirname $WHEREAMI`
 
 CONFIG=${PROJECT}/www/include/config.php
-CONFIG_LOCALS=${PROJECT}/www/include/config-local.php
+CONFIG_LOCAL=${PROJECT}/www/include/config-local.php
 
 DBNAME='dotspotting'
 USERNAME='dotspotting'
@@ -18,8 +18,11 @@ PASSWORD=`${PHP} ${PROJECT}/bin/generate_secret.php`
 
 touch /tmp/${DNAME}.sql
 
-echo "DROP DATABASE ${DBNAME};" > /tmp/${DBNAME}.sql
-echo "CREATE DATABASE ${DBNAME};" > /tmp/${DBNAME}.sql
+echo "DROP DATABASE ${DBNAME};" >> /tmp/${DBNAME}.sql
+echo "DROP user '${USERNAME}'@'localhost';" >> /tmp/${DBNAME}.sql
+echo "FLUSH PRIVILEGES;" >> /tmp/${DBNAME}.sql
+
+echo "CREATE DATABASE ${DBNAME};" >> /tmp/${DBNAME}.sql
 echo "CREATE user '${USERNAME}'@'localhost' IDENTIFIED BY '${PASSWORD}';" >> /tmp/${DBNAME}.sql
 echo "GRANT SELECT,UPDATE,DELETE,INSERT ON ${DBNAME}.* TO '${USERNAME}'@'localhost' IDENTIFIED BY '${PASSWORD}';" >> /tmp/${DBNAME}.sql
 echo "FLUSH PRIVILEGES;" >> /tmp/${DBNAME}.sql
@@ -35,6 +38,7 @@ done
 mysql -u root -p < /tmp/${DBNAME}.sql
 unlink /tmp/${DBNAME}.sql
 
+echo "update the config file with db password"
 perl -p -i -e "s/DB\-MAIN\-PASSWORD/${PASSWORD}/" ${CONFIG_LOCAL}
 
 echo "done"
