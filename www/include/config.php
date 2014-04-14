@@ -26,7 +26,76 @@
 	# Don't turn this on until there is a working offline tasks system
 	# $GLOBALS['cfg']['enable_feature_enplacify'] = 0;
 
-	$GLOBALS['cfg']['enable_feature_api'] = 1;
+	# API URLs and endpoints
+
+	$GLOBALS['cfg']['api_abs_root_url'] = '';	# leave blank - set in api_config_init()
+	$GLOBALS['cfg']['site_abs_root_url'] = '';	# leave blank - set in api_config_init()
+
+	$GLOBALS['cfg']['api_subdomain'] = '';
+	$GLOBALS['cfg']['api_endpoint'] = 'api/rest/';
+
+	$GLOBALS['cfg']['api_require_ssl'] = 1;
+
+	# API site keys
+	
+	$GLOBALS['cfg']['enable_feature_api_site_keys'] = 1;
+	$GLOBALS['cfg']['enable_feature_api_site_tokens'] = 1;
+
+	$GLOBALS['cfg']['api_site_keys_ttl'] = 28800;		# 8 hours
+	$GLOBALS['cfg']['api_site_tokens_ttl'] = 28000;		# 8 hours
+	$GLOBALS['cfg']['api_site_tokens_user_ttl'] = 3600;	# 1 hour
+
+	# API pagination
+
+	$GLOBALS['cfg']['api_per_page_default'] = 100;
+	$GLOBALS['cfg']['api_per_page_max'] = 500;
+
+	# The actual API config
+
+	$GLOBALS['cfg']['api'] = array(
+
+		'formats' => array( 'json' ),
+		'default_format' => 'json',
+
+		# We're defining methods using the method_definitions
+		# hooks defined below to minimize the clutter in the
+		# main config file, aka this one (20130308/straup)
+		'methods' => array(),
+
+		# We are NOT doing the same for blessed API keys since
+		# it's expected that their number will be small and
+		# manageable (20130308/straup)
+
+		'blessings' => array(
+			'xxx-apikey' => array(
+				'hosts' => array('127.0.0.1'),
+				# 'tokens' => array(),
+				# 'environments' => array(),
+				'methods' => array(
+					'foo.bar.baz' => array(
+						'environments' => array('sd-931')
+					)
+				),
+				'method_classes' => array(
+					'foo.bar' => array(
+						# see above
+					)
+				),
+			),
+		),
+	);
+
+	# Load api methods defined in separate PHP files whose naming
+	# convention is FLAMEWORK_INCLUDE_DIR . "/config_api_{$definition}.php";
+	#
+	# IMPORTANT: This is syntactic sugar and helper code to keep the growing
+	# number of API methods out of the main config. Stuff is loaded in to
+	# memory in lib_api_config:api_config_init (20130308/straup)
+
+	$GLOBALS['cfg']['api_method_definitions'] = array(
+		'methods',
+	);
+
 
 	$GLOBALS['cfg']['enable_feature_signup'] = 1;
 	$GLOBALS['cfg']['enable_feature_signin'] = 1;
