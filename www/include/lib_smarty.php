@@ -1,18 +1,20 @@
-<?
+<?php
 	#
 	# $Id$
 	#
 
-	$GLOBALS['timings']['smarty_comp_count'] = 0;
+	$GLOBALS['timings']['smarty_comp_count']	= 0;
 	$GLOBALS['timings']['smarty_comp_time']	= 0;
 
-	include_once(DOTSPOTTING_INCLUDE_DIR . 'smarty_2.6.26/Smarty.class.php');
+	define('FLAMEWORK_SMARTY_DIR', FLAMEWORK_INCLUDE_DIR.'/smarty_2.6.28/');
+	require(FLAMEWORK_SMARTY_DIR . 'Smarty.class.php');
+
 	$GLOBALS['smarty'] = new Smarty();
 
 	$GLOBALS['smarty']->template_dir = $GLOBALS['cfg']['smarty_template_dir'];
 	$GLOBALS['smarty']->compile_dir  = $GLOBALS['cfg']['smarty_compile_dir'];
 	$GLOBALS['smarty']->compile_check = $GLOBALS['cfg']['smarty_compile'];
-	$GLOBALS['smarty']->force_compile = $GLOBALS['cfg']['smarty_compile'];
+	$GLOBALS['smarty']->force_compile = 0; #$GLOBALS['cfg']['smarty_compile'];
 
 	$GLOBALS['smarty']->assign_by_ref('cfg', $GLOBALS['cfg']);
 
@@ -55,4 +57,11 @@
 	$GLOBALS['smarty']->register_function('timings', 'smarty_timings');
 
 	#######################################################################################
+
+	function smarty_dump($params) {
+		dumper($params);
+	}
+
+	$GLOBALS['smarty']->register_function('dump', 'smarty_dump');
+
 ?>

@@ -2,33 +2,23 @@
 
 IMA=$1
 
-#
 # http://snowulf.com/archives/540-Truly-non-interactive-unattended-apt-get-install.html
-#
 
 export DEBIAN_FRONTEND=noninteractive
 
 OPTS='-y -q=2 --force-yes'
 INSTALL='apt-get '${OPTS}' install'
 
-#
-# I have no idea why this is sometimes necessary
-# It's really annoying...
-#
-
 FIX_DPKG='dpkg --configure -a'
 
-#
+
 # First deal with any pending updates
-#
 
 apt-get update
 apt-get ${OPTS} upgrade
 
-#
 # "this is what we do at Etsy, and what we did at Flickr
 # for a basic webserver" (Allspaw/20100518)
-#
 
 sysctl -w kernel.panic=1
 sysctl -w kernel.shmmax=2147483648
@@ -58,8 +48,7 @@ ${FIX_DPKG}
 ${INSTALL} ganglia-monitor
 ${FIX_DPKG}
 
-${INSTALL} htop
-${INSTALL} sysstat
+${INSTALL} htop sysstate
 
 ${INSTALL} mysql-server
 
@@ -75,9 +64,4 @@ ln -s /etc/apache2/mods-available/proxy_http.load /etc/apache2/mods-enabled/
 
 /etc/init.d/apache2 restart
 
-${INSTALL} php5
-${INSTALL} php-pear
-${INSTALL} php5-mysql
-${INSTALL} php5-mcrypt
-${INSTALL} php5-curl
-${INSTALL} php5-gd
+${INSTALL} php5 php-pear php5-mysql php5-mcrypt php5-curl php5-gd
