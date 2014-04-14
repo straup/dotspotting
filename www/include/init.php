@@ -28,10 +28,10 @@
 
 	# Go!
 
-	define('DOTSPOTTING_WWW_DIR', dirname(dirname(__FILE__)) );
-	define('DOTSPOTTING_INCLUDE_DIR', DOTSPOTTING_WWW_DIR . '/include/');
+	define('FLAMEWORK_WWW_DIR', dirname(dirname(__FILE__)) );
+	define('FLAMEWORK_INCLUDE_DIR', FLAMEWORK_WWW_DIR . '/include/');
 
-	define('FPDF_FONTPATH', DOTSPOTTING_INCLUDE_DIR . '/pear/fpdf_fonts/');
+	define('FPDF_FONTPATH', FLAMEWORK_INCLUDE_DIR . '/pear/fpdf_fonts/');
 
 	# See this? We're being super restrictive about where we look
 	# for libs. Dotspotting should be able to run as-is with everything
@@ -39,15 +39,15 @@
 
 	$include_path = array(
 		".",
-		DOTSPOTTING_INCLUDE_DIR,
-		DOTSPOTTING_INCLUDE_DIR . "pear/"
+		FLAMEWORK_INCLUDE_DIR,
+		FLAMEWORK_INCLUDE_DIR . "pear/"
 	);
 
 	ini_set("include_path", implode(":", $include_path));
 
-	include(DOTSPOTTING_INCLUDE_DIR . "config.php");
-	include(DOTSPOTTING_INCLUDE_DIR . "config-api.php");
-	include(DOTSPOTTING_INCLUDE_DIR . "config-local.php");
+	include(FLAMEWORK_INCLUDE_DIR . "config.php");
+	include(FLAMEWORK_INCLUDE_DIR . "config-api.php");
+	include(FLAMEWORK_INCLUDE_DIR . "config-local.php");
 
 	#
 	# First, ensure that 'abs_root_url' is both assigned and properly
@@ -314,7 +314,7 @@
 
 		$GLOBALS['loaded_libs'][$name] = 1;
 
-		$fq_name = DOTSPOTTING_INCLUDE_DIR . "lib_{$name}.php";
+		$fq_name = FLAMEWORK_INCLUDE_DIR . "lib_{$name}.php";
 		include_once($fq_name);
 	}
 
@@ -326,7 +326,7 @@
 
 		$GLOBALS['loaded_libs']['PEAR:'.$name] = 1;
 
-		$fq_name = DOTSPOTTING_INCLUDE_DIR . "pear/{$name}.php";
+		$fq_name = FLAMEWORK_INCLUDE_DIR . "pear/{$name}.php";
 		include_once($fq_name);
 	}
 
