@@ -4,14 +4,12 @@
 	# $Id$
 	#
 
-	# This file has been copied from the Citytracking fork of flamework.
-	# It has not been forked, or cloned or otherwise jiggery-poked, but
-	# copied: https://github.com/Citytracking/flamework (20101208/straup)
-
 	#################################################################
 
 	function api_output_ok($rsp=array()){
+
 		$rsp['stat'] = 'ok';
+
 		_api_output_rest_send_response($rsp);
 	}
 
@@ -33,6 +31,7 @@
 	#################################################################
 
 	function _api_output_rest_send_response(&$rsp){
+
 		$format = $GLOBALS['cfg']['api']['formats']['current'];
 		$function = "_api_output_rest_send_{$format}";
 
