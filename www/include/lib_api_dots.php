@@ -1,23 +1,12 @@
 <?php
 
-	#
-	# $Id$
-	#
-
 	#################################################################
 
-	# Please to write me...
-
-	#################################################################
 	loadlib("dots");
 	loadlib("users");
 	
-	
-	// well is this cute...
-	// is this right ????? (20110921 | seanc)
-	
-	//
-	// http://seanc.dotspotting.stamen.com/api?method=dotspotting.dots.dotsForUser&user=16&format=jsonp
+	#################################################################
+
 	function api_dots_dotsForUser(){
 	    
 	    // these keys not important
@@ -54,4 +43,6 @@
 	    
 	}
 
-?>
+	#################################################################
+
+	# the end 

@@ -1,9 +1,5 @@
 <?php
 
-	#
-	# $Id$
-	#
-
 	#################################################################
 
 	loadlib("geo_utils");
@@ -569,35 +565,37 @@
 	#################################################################
 	
 	
-	// does stuff that front-end needs to create dataTable (seanc | 07072011)
-	#################################################################
-	
+	# does stuff that front-end needs to create dataTable (seanc | 07072011)
+
 	function import_preprocess_address_fields($rsp){
-	    if(!isset($rsp['data']) && empty($rsp['data']))return $rsp;
-	    
-        loadlib("dots_address");
 
-        $needs_geocoding = 0;
+		if (!isset($rsp['data']) && empty($rsp['data'])){
+			return $rsp;
+		}
 
-        # note the pass-by-ref on $row
+		loadlib("dots_address");
 
-        foreach ($rsp['data'] as &$row){
+		$needs_geocoding = 0;
 
-        	if (($row['latitude']) && ($row['longitude'])){
-        		$row['_has_latlon'] = 1;
-        		continue;
-        	}
+		# note the pass-by-ref on $row
 
-        	$row['_has_latlon'] = 0;
-        	$row['_address'] = dots_address_parse_for_geocoding($row);
+		foreach ($rsp['data'] as &$row){
 
-        	$needs_geocoding += 1;
-        }
+			if (($row['latitude']) && ($row['longitude'])){
+				$row['_has_latlon'] = 1;
+				continue;
+			}
 
-        $rsp['needs_geocoding'] = $needs_geocoding;
+			$row['_has_latlon'] = 0;
+			$row['_address'] = dots_address_parse_for_geocoding($row);
 
-        return $rsp;
+			$needs_geocoding += 1;
+		}
+
+		$rsp['needs_geocoding'] = $needs_geocoding;
+		return $rsp;
 	}
 
 	#################################################################
-?>
+
+	# the end

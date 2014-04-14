@@ -1,9 +1,5 @@
 <?php
 
-	#
-	# $Id$
-	#
-
 	loadpear("modestmaps/ModestMaps");
 	loadlib("wscompose");
 
@@ -330,4 +326,5 @@
 	}
 
 	#################################################################
-?>
+
+	# the end

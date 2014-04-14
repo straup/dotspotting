@@ -1,7 +1,4 @@
-<?
-	#
-	# $Id$
-	#
+<?php
 
 	########################################################################
 
@@ -12,8 +9,20 @@
 	########################################################################
 
 	function http_head($url, $headers=array(), $more=array()){
-		$more['head'] = 1;
-		return http_get($url, $headers, $more);
+
+		$ch = _http_curl_handle($url, $headers, $more);
+
+		# ensure NOBODY is set so that headers are returned
+
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'HEAD');
+		curl_setopt($ch, CURLOPT_NOBODY, true);
+		curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+
+		if ($more['return_curl_handle']){
+			return $ch;
+		}
+
+		return _http_request($ch, $url, $more);
 	}
 
 	########################################################################
@@ -21,11 +30,6 @@
 	function http_get($url, $headers=array(), $more=array()){
 
 		$ch = _http_curl_handle($url, $headers, $more);
-
-		if ($more['head']){
-			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'HEAD');
-			curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-		}
 
 		if ($more['return_curl_handle']){
 			return $ch;
@@ -52,6 +56,36 @@
 
 	########################################################################
 
+	function http_put($url, $bytes, $headers=array(), $more=array()){
+
+		$ch = _http_curl_handle($url, $headers, $more);
+
+		# See the monster you've created, Roy? See???!?!?!!
+
+		if (isset($more['donotsend_transfer_encoding'])){
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+		}
+
+		else {
+			curl_setopt($ch, CURLOPT_PUT, true);
+		}
+
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $bytes);
+		curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+
+		# TODO: sort out PUT-ing files
+		# curl_setopt($ch, CURLOPT_INFILE, $bytes);
+		# curl_setopt($ch, CURLOPT_INFILESIZE, strlen($bytes));
+
+		if ($more['return_curl_handle']){
+			return $ch;
+		}
+
+		return _http_request($ch, $url, $more);
+	}
+
+	########################################################################
+
 	function http_multi(&$requests){
 
 		$handles = array();
@@ -62,6 +96,7 @@
 			$url = $req['url'];
 
 			$method = (isset($req['method'])) ? strtoupper($req['method']) : 'GET';
+			$body = (is_array($req['body'])) ? $req['body'] : null;
 			$headers = (is_array($req['headers'])) ? $req['headers'] : array();
 			$more = (is_array($req['more'])) ? $req['more'] : array();
 
@@ -71,12 +106,16 @@
 				$ch = http_head($url, $headers, $more);
 			}
 
-			else if ($method == 'POST'){
-				$ch = http_post($url, $headers, $more);
-			}
-
 			else if ($method == 'GET'){
 				$ch = http_get($url, $headers, $more);
+			}
+
+			else if ($method == 'POST'){
+				$ch = http_post($url, $body, $headers, $more);
+			}
+
+			else if ($method == 'PUT'){
+				$ch = http_put($url, $body, $headers, $more);
 			}
 
 			else {
@@ -99,6 +138,7 @@
 		$start = microtime_ms();
 
 		# this syntax makes my eyes bleed but whatever...
+		# (20110822/straup)
 
 		do {
 			$mrc = curl_multi_exec($mh, $active);

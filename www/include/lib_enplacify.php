@@ -1,14 +1,5 @@
 <?php
 
-	#
-	# $Id$
-	#
-
-	# This file has been copied from the Citytracking fork of lib_enplacify.
-	# It has not been forked, or cloned or otherwise jiggery-poked, but
-	# copied: https://github.com/Citytracking/php-lib-enplacify
-	# (20101213/straup)
-
 	######################################################
 
 	function enplacify_uri($uri){
@@ -103,4 +94,5 @@
 	}
 
 	######################################################
-?>
+
+	# the end

@@ -1,10 +1,6 @@
 <?php
 
 	#
-	# $Id$
-	#
-
-	#
 	# Poor man's faceting in the absence of a proper search engine like
 	# Solr. This is designed to work with a) a not-gigantic dataset and
 	# b) preferably some kind of caching like Memcached or c) you're not
@@ -188,4 +184,5 @@
 	}
 
 	#################################################################
-?>
+
+	# the end

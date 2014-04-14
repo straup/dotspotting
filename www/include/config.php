@@ -1,34 +1,16 @@
 <?php
 
-	# This file has been copied from the Citytracking fork of flamework.
-	# It has not been forked, or cloned or otherwise jiggery-poked, but
-	# copied: https://github.com/Citytracking/flamework
-	#
-	# It has also been *modified* to include Dotspotting specific stuff.
-
-	#############################################################
-
-	#
-	# You should NOT be editing this file. You should instead be editing
-	# the config file found in dotspotting/config/dotspotting.php. See also:
-	# https://github.com/Citytracking/dotspotting/blob/master/README.CONFIG.md
-	#
-
 	$GLOBALS['cfg'] = array();
 
 	$GLOBALS['cfg']['dotspotting_version'] = '0.0.0';	# see also: http://semver.org/
 
-	#
 	# Things you might want to do quickly
-	#
 
 	$GLOBALS['cfg']['disable_site'] = 0;
 	$GLOBALS['cfg']['show_show_header_message'] = 0;
 
-	#
 	# Feature flags
 	# See also: http://code.flickr.com/blog/2009/12/02/flipping-out/
-	#
 
 	$GLOBALS['cfg']['enable_feature_import'] = 1;
 	$GLOBALS['cfg']['enable_feature_import_by_url'] = 0;
@@ -36,9 +18,7 @@
 	$GLOBALS['cfg']['enable_feature_import_archive'] = 0;
 
 	$GLOBALS['cfg']['enable_feature_dots_indexing'] = 1;
-
-	# This flag has precedence over dots_indexing_max_cols
-	$GLOBALS['cfg']['dots_indexing_index_all'] = 1;
+	$GLOBALS['cfg']['dots_indexing_index_all'] = 1; 	# This flag has precedence over dots_indexing_max_cols
 
 	$GLOBALS['cfg']['dots_indexing_max_cols'] = 4;
 	$GLOBALS['cfg']['dots_indexing_max_cols_list'] = range(1, $GLOBALS['cfg']['dots_indexing_max_cols']);
@@ -56,11 +36,18 @@
 	$GLOBALS['cfg']['password_retrieval_from_email'] = "do-not-reply@{$_SERVER['SERVER_NAME']}";
 	$GLOBALS['cfg']['password_retrieval_from_name'] = 'Dotspotting Password Helper Robot';
 
+	# wscompose for stitching together map tiles into a
+	# static image
+
 	$GLOBALS['cfg']['enable_feature_wscompose'] = 0;	# Use the ModestMaps wscompose server for rendering maps
 								# This is off by default because it requires running a
 								# separate service.
+
 	$GLOBALS['cfg']['wscompose_host'] = 'http://127.0.0.1';
 	$GLOBALS['cfg']['wscompose_port'] = 9999;
+
+	$GLOBALS['cfg']['wscompose_enable_multigets'] = 0;
+	$GLOBALS['cfg']['wscompose_max_dots_for_multigets'] = 25;	# This is to prevent Dotspoting from accidentally DOS-ing itself.
 
 	$GLOBALS['cfg']['enable_feature_geocoding'] = 1;
 
@@ -107,9 +94,7 @@
 		),
 	);
 
-	#
 	# God auth
-	#
 
 	$GLOBALS['cfg']['auth_enable_poormans_god_auth'] = 0;
 
@@ -119,22 +104,18 @@
 	# 	),
 	# );
 
-	#
 	# Crypto stuff
-	#
 
-	$GLOBALS['cfg']['crypto_cookie_secret'] = 'READ-FROM-CONFIG';
-	$GLOBALS['cfg']['crypto_password_secret'] = 'READ-FROM-CONFIG';
-	$GLOBALS['cfg']['crypto_crumb_secret'] = 'READ-FROM-CONFIG';
+	$GLOBALS['cfg']['crypto_cookie_secret'] = 'READ-FROM-SECRETS';
+	$GLOBALS['cfg']['crypto_password_secret'] = 'READ-FROM-SECRETS';
+	$GLOBALS['cfg']['crypto_crumb_secret'] = 'READ-FROM-SECRETS';
 
-	#
 	# Database stuff
-	#
 
 	$GLOBALS['cfg']['db_main'] = array(
-		'host'	=> 'READ-FROM-CONFIG',
-		'user'	=> 'READ-FROM-CONFIG',
-		'pass'	=> 'READ-FROM-CONFIG',
+		'host'	=> 'READ-FROM-SECRETS',
+		'user'	=> 'READ-FROM-SECRETS',
+		'pass'	=> 'READ-FROM-SECRETS',
 		'name'	=> 'dotspotting',
 		'auto_connect' => 1,
 	);
@@ -180,6 +161,7 @@
 	$GLOBALS['cfg']['pagination_per_page'] = 100;
 	$GLOBALS['cfg']['pagination_spill'] = 5;
 	$GLOBALS['cfg']['pagination_assign_smarty_variable'] = 1;
+	$GLOBALS['cfg']['pagination_style'] = "pretty";
 
 	$GLOBALS['cfg']['import_max_records'] = 1000;
 	$GLOBALS['cfg']['import_by_url_do_head'] = 1;
@@ -202,8 +184,9 @@
 	$GLOBALS['cfg']['enable_feature_export_cache'] = 0;
 	$GLOBALS['cfg']['export_cache_root'] = '';
 
+	# the list of things that can not be cached
+
 	$GLOBALS['cfg']['export_cache_exclude_formats'] = array(
-		# the list of things that can not be cached
 	);
 
 	# things that users can tweaks exporting a sheet
@@ -248,9 +231,9 @@
 	# Email
 	#
 
-	$GLOBALS['cfg']['email_from_name']	= 'READ-FROM-CONFIG';
-	$GLOBALS['cfg']['email_from_email']	= 'READ-FROM-CONFIG';
-	$GLOBALS['cfg']['auto_email_args']	= 'READ-FROM-CONFIG';
+	$GLOBALS['cfg']['email_from_name']	= 'READ-FROM-SECRETS';
+	$GLOBALS['cfg']['email_from_email']	= 'READ-FROM-SECRETS';
+	$GLOBALS['cfg']['auto_email_args']	= 'READ-FROM-SECRETS';
 
 	#
 	# Geo
@@ -332,68 +315,18 @@
 		),
 	);
 
-	#
 	# Third-party API keys
-	#
 
-	$GLOBALS['cfg']['flickr_apikey'] = 'READ-FROM-CONFIG';
+	$GLOBALS['cfg']['flickr_apikey'] = 'READ-FROM-SECRETS';
 	$GLOBALS['cfg']['google_analytics_id'] = '';
-    $GLOBALS['cfg']['mixpanel_id'] = '';
+	$GLOBALS['cfg']['mixpanel_id'] = '';
 
-	#
 	# Things you can probably not worry about
-	#
 
 	$GLOBALS['cfg']['user'] = null;
-
 	$GLOBALS['cfg']['smarty_compile'] = 1;
-
 	$GLOBALS['cfg']['http_timeout'] = 3;
-
 	$GLOBALS['cfg']['check_notices'] = 1;
+	$GLOBALS['cfg']['db_profiling'] = 0;	
 
-	$GLOBALS['cfg']['db_profiling'] = 0;
-	
-	
-    #
-    # MISC
-    #
-    
-    // basic | pretty
-    $GLOBALS['cfg']['pagination_style'] = "pretty";
-    
-    
-	#
-	# USER STYLES
-	# not in effect, needs to be re-thought out after switching to kirby dot (seanc | 6282011)
-	#
-	# implemented in global styles and include/lib_maps.php
-	# TODO: apply these to other export options
-	#
-	/*
-	# dot color props
-	# fill,stroke array = rgba
-	# alpha =  0 = completely transparent, 1 = opaque
-	$GLOBALS['cfg']['dot_color_scheme'] = array(
-		'fill' => array(11,189,255,1),
-		'stroke' => array(255,255,255,1),
-		'stroke_width' => 3,
-		'fill_hover' => array(0,221,238,1),
-		'stroke_hover' => array(0,17,45,1),
-		'stroke_width_hover' => 5,
-		'private' => array(255,0,0,1)
-	);
-	
-	# sheet color props
-	# fill,stroke array = rgba
-	# alpha =  0 = completely transparent, 1 = opaque
-	$GLOBALS['cfg']['sheet_color_scheme'] = array(
-		'fill' => array(11,189,255,.4),
-		'stroke' => array(11,189,255,1),
-		'stroke_width' => 4,
-		'fill_hover' => array(11,189,255,.1),
-		'stroke_hover' => array(11,189,255,1),
-		'stroke_width_hover' => 4
-	);
-	*/
-?>
+	# the end

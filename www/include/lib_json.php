@@ -1,9 +1,5 @@
 <?php
 
-	#
-	# $Id$
-	#
-
 	# And by 'json' we really mean 'geojson'. See also:
 	# http://geojson.org/geojson-spec.html
 
@@ -206,4 +202,5 @@
 	}
 
 	#################################################################
-?>
+
+	# the end

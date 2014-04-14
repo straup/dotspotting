@@ -1,11 +1,4 @@
 <?php
-	#
-	# $Id$
-	#
-
-	# This file has been copied from the Citytracking fork of flamework.
-	# It has not been forked, or cloned or otherwise jiggery-poked, but
-	# copied: https://github.com/Citytracking/flamework (20101208/straup)
 
 	#################################################################
 
@@ -18,15 +11,9 @@
 
 		if ($GLOBALS['cfg']['user']['id']) return;
 
-		$base_url = isset($GLOBALS['cfg']) && isset($GLOBALS['cfg']['abs_root_url'])
-		    ? rtrim($GLOBALS['cfg']['abs_root_url'], '/')
-		    : '';
+		if (!$redir) $redir = $_SERVER['REQUEST_URI'];
 
-		if ($redir){
-			header("Location: {$base_url}/signin/?redir=".urlencode($redir));
-		}else{
-			header("Location: {$base_url}/signin/");
-		}
+		header("location: {$GLOBALS['cfg']['abs_root_url']}signin?redir=".urlencode($redir));
 		exit;
 	}
 
@@ -37,19 +24,13 @@
 	# optionally logging them out first.
 	#
 
-	function login_ensure_loggedout($redir="/", $force_logout=false){
+	function login_ensure_loggedout($redir="", $force_logout=false){
 
 		if (!$GLOBALS['cfg']['user']['id']) return;
 
 		if ($force_logout) login_do_logout();
 
-		$base_url = isset($GLOBALS['cfg']) && isset($GLOBALS['cfg']['abs_root_url'])
-		    ? rtrim($GLOBALS['cfg']['abs_root_url'], '/')
-		    : '';
-		
-		$redir = ltrim($redir, '/');
-		
-		header("Location: {$base_url}/{$redir}");
+		header("location: {$GLOBALS['cfg']['abs_root_url']}{$redir}");
 		exit;
 	}
 
@@ -102,21 +83,19 @@
 
 	function login_do_login(&$user, $redir=''){
 
-		$expires = time() * 2;
+		$expires = ($GLOBALS['cfg']['enable_feature_persistent_login']) ? strtotime('now +10 years') : 0;
 
 		$auth_cookie = login_generate_auth_cookie($user);
 		login_set_cookie($GLOBALS['cfg']['auth_cookie_name'], $auth_cookie, $expires);
 
-		$base_url = isset($GLOBALS['cfg']) && isset($GLOBALS['cfg']['abs_root_url'])
-		    ? rtrim($GLOBALS['cfg']['abs_root_url'], '/')
-		    : '';
-		
-		if (! $redir){
-			$redir = "{$base_url}/";
-		}
+		$loc = "{$GLOBALS['cfg']['abs_root_url']}checkcookie/";
 
-		$redir = urlencode($redir);
-		header("Location: {$base_url}/checkcookie/?redir={$redir}");
+		if ($redir){
+			$query = array('redir' => $redir);
+			$loc = $loc . "?" . http_build_query($query);
+		}	
+
+		header("location: $loc");
 		exit;
 	}
 
@@ -137,12 +116,6 @@
 
 	#################################################################
 
-	function login_encrypt_password($pass){
-		return hash_hmac("sha256", $pass, $GLOBALS['cfg']['crypto_password_secret']);
-	}
-
-	#################################################################
-
 	function login_get_cookie($name){
 		return $_COOKIE[$name];
 	}
@@ -150,34 +123,15 @@
 	#################################################################
 
 	function login_set_cookie($name, $value, $expire=0, $path='/'){
-		$res = setcookie(
-			$name,
-			$value,
-			$expire,
-			$path,
-			$GLOBALS['cfg']['auth_cookie_domain'],
-			$GLOBALS['cfg']['auth_cookie_secure'],
-			$GLOBALS['cfg']['auth_cookie_httponly']
-		);
+		$domain = ($GLOBALS['cfg']['environment'] == 'localhost') ? false : $GLOBALS['cfg']['auth_cookie_domain'];
+		$securify = (($GLOBALS['cfg']['auth_cookie_require_https']) && (isset($_SERVER['HTTPS'])) && ($_SERVER['HTTPS'] == 'on')) ? 1 : 0;
+		$res = setcookie($name, $value, $expire, $path, $domain, $securify);
 	}
 
 	#################################################################
 
-	function login_unset_cookie($name, $path='/'){
-
-		$value = '';
-		$expire = time() - 3600;
-
-		$res = setcookie(
-			$name,
-			$value,
-			$expire,
-			$path,
-			$GLOBALS['cfg']['auth_cookie_domain'],
-			$GLOBALS['cfg']['auth_cookie_secure'],
-			$GLOBALS['cfg']['auth_cookie_httponly']
-		);
+	function login_unset_cookie($name){
+		login_set_cookie($name, "", time() - 3600);
 	}
 
 	#################################################################
-?>
