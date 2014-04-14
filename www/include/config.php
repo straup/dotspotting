@@ -113,10 +113,10 @@
 	# Database stuff
 
 	$GLOBALS['cfg']['db_main'] = array(
-		'host'	=> 'READ-FROM-SECRETS',
-		'user'	=> 'READ-FROM-SECRETS',
-		'pass'	=> 'READ-FROM-SECRETS',
+		'host'	=> 'localhost',
 		'name'	=> 'dotspotting',
+		'user'	=> 'dotspotting',
+		'pass'	=> 'READ-FROM-SECRETS',
 		'auto_connect' => 1,
 	);
 

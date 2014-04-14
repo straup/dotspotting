@@ -42,17 +42,9 @@ sysctl -w net.core.netdev_max_backlog=2500
 # ${INSTALL} emacs23-nox
 # ${FIX_DPKG}
 
-${INSTALL} git-core
-${FIX_DPKG}
+${INSTALL} git htop sysstate
 
-${INSTALL} ganglia-monitor
-${FIX_DPKG}
-
-${INSTALL} htop sysstate
-
-${INSTALL} mysql-server
-
-${INSTALL} apache2
+${INSTALL} mysql-server apache2
 
 ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/
 ln -s /etc/apache2/mods-available/proxy.conf /etc/apache2/mods-enabled/

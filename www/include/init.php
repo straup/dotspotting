@@ -1,14 +1,4 @@
 <?
-	#
-	# $Id$
-	#
-
-	# This file has been copied from the Citytracking fork of flamework.
-	# It has not been forked, or cloned or otherwise jiggery-poked, but
-	# copied: https://github.com/Citytracking/flamework (20101208/straup)
-	#
-	# It has also since been *modified* to include Dotspotting specific
-	# stuff.
 
 	#############################################################
 
@@ -55,15 +45,9 @@
 
 	ini_set("include_path", implode(":", $include_path));
 
-	define('DOTSPOTTING_CONFIG_DIR', dirname(DOTSPOTTING_WWW_DIR) . '/config/');
-
 	include(DOTSPOTTING_INCLUDE_DIR . "config.php");
-
-	if ($GLOBALS['cfg']['enable_feature_api']){
-		include(DOTSPOTTING_INCLUDE_DIR . "config-api.php");
-	}
-
-	include(DOTSPOTTING_CONFIG_DIR . "dotspotting.php");
+	include(DOTSPOTTING_INCLUDE_DIR . "config-api.php");
+	include(DOTSPOTTING_INCLUDE_DIR . "config-local.php");
 
 	#
 	# First, ensure that 'abs_root_url' is both assigned and properly
